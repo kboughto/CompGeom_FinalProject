@@ -5,7 +5,8 @@ import os
 
 """This module tries making Convex Hulls around images using thresholding:
 basically turning an image into a binary one by making pixels bayond a certain hue white and every other pice black.
-The issue with this is most house objects are very similar colors to its surroundings."""
+The issue with this is most house objects are very similar colors to its surroundings.
+Code was used from https://learnopencv.com/convex-hull-using-opencv-in-python-and-c/"""
 
 img = cv2.imread("house_living_room.jpg")
 
