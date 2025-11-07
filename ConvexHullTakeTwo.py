@@ -2,6 +2,11 @@ import cv2
 import matplotlib.pyplot as plt
 import numpy as np
 
+"""This module tries making Convex Hulls around images using the Canny Edge Detection technique:
+basically turning an image into a binary one by making pixels with dratic color change one color and every other pixel another.
+The issue with this is these edges are too precise and don't make closed shapes. I was hoping using a Convex Hull
+would close it up, but that's not proving to be the case"""
+
 img = cv2.imread("house_living_room2.jpg")
 
 img_invert = cv2.bitwise_not(img)

@@ -3,6 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+"""This module tries making Convex Hulls around images using thresholding:
+basically turning an image into a binary one by making pixels bayond a certain hue white and every other pice black.
+The issue with this is most house objects are very similar colors to its surroundings."""
+
 img = cv2.imread("house_living_room.jpg")
 
 img_invert = cv2.bitwise_not(img)
