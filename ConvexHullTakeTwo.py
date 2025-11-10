@@ -1,12 +1,9 @@
 """This module tries making Convex Hulls around images using the Canny Edge Detection technique:
 basically turning an image into a binary one by making pixels with dratic color change one color and every other pixel another.
-The issue with this is these edges are too precise and don't make closed shapes. I was hoping using a Convex Hull
-would close it up, but that's not proving to be the case.
 Code was used from https://learnopencv.com/edge-detection-using-opencv/"""
 
 import cv2
 import matplotlib.pyplot as plt
-import numpy as np
 
 # Initializes variables
 img = cv2.imread("circle_classroom.png")
@@ -22,6 +19,9 @@ def getHierarchy(contour, hierarchy):
         hier += 1
     return hier
 
+# makes a hashmap (as Python calls it, a dictionary) where the keys are the possible hierarchies
+# of Convex Hulls and the values are the indices of the Hull points which are in that hierarchy.
+# Returns the hashmap
 def makeHierMap(hullIndices, hierarchy):
     hierMap = {}
     for i in range(len(hullIndices)):
