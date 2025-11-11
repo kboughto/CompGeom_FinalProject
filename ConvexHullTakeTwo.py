@@ -6,7 +6,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 # Initializes variables
-img = cv2.imread("circle_classroom.png")
+img = cv2.imread("sample_classrooms/house_living_room.jpg")
 hull = []
 
 # Given a contour in the form of a hierarchy array and the list of hierarchy arrays,
@@ -46,13 +46,12 @@ def getImage():
 # polygons approximately cover significant objects on the image.
 # Returns that edited image
 def makeConvexHull(contours, hierarchy, img, hullPoints):
-    # calculate points for each contour
-    imgArea = img.shape[0] * img.shape[1]
+    imgArea = img.shape[0] * img.shape[1] # area of original image
     hullIndices = []
     for i in range(len(contours)):
         # creating convex hull object for each contour
         if cv2.contourArea(contours[i])/imgArea < 0.05: # hulls must be smaller than 5% of the image
-            hullIndices.append(i)
+            hullIndices.append(i) # keeps track of indices of legal Convex Hulls in contours
             hullPoints.append(cv2.convexHull(contours[i], False))
 
     hierMap = makeHierMap(hullIndices, hierarchy)
@@ -60,9 +59,9 @@ def makeConvexHull(contours, hierarchy, img, hullPoints):
     for hier in hierMap.keys():
         hullLenDict[len(hierMap[hier])] = hier
     
-    hullPoints = [hullPoints[ind] for ind in hierMap[hullLenDict[min(hullLenDict.keys())]]]
+    hullPoints = [hullPoints[ind] for ind in hierMap[hullLenDict[min(hullLenDict.keys())]]] # captures all Convex Hull points from the hierarchy tier with the least # of hulls
 
-    img_hull = img.copy()
+    img_hull = img.copy() # so it doesn't change original image
  
     # draw contours and hull points
     for i in range(len(hullPoints)):
@@ -73,14 +72,19 @@ def makeConvexHull(contours, hierarchy, img, hullPoints):
         
     return img_hull
 
-img_invert = cv2.bitwise_not(img)
-img_blur = cv2.blur(img_invert, (int(25/1111 * img.shape[0]), int(25/1500 * img.shape[1]))) # blurs the image
+img_invert = cv2.bitwise_not(img) # turns every pixel of image into its negative. More likely to darken image, which makes edges more apparent
+img_blur = cv2.blur(img_invert, (int(25/1111 * img.shape[0]), int(25/1500 * img.shape[1]))) # blurs the image. Done to make detected edges surround more obvious features of image
 
-img_edges = cv2.Canny(image=img_blur, threshold1=20, threshold2=40) # Canny Edge Detection. Works SHOCKINGLY well
-img_blur_edges = cv2.blur(img_edges, (int(15/1111 * img.shape[0]), int(15/1500 * img.shape[1]))) # blurs the image
+img_edges = cv2.Canny(image=img_blur, threshold1=20, threshold2=40) # Canny Edge Detection. Works SHOCKINGLY well with detecting objects
+img_blur_edges = cv2.blur(img_edges, (int(15/1111 * img.shape[0]), int(15/1500 * img.shape[1]))) # blurs the image AGAIN so Convex Hulls surround most obvious objects
 
-# from the threshold image, it finds the contours of it
-contours, hierarchy = cv2.findContours(img_blur_edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+contours, hierarchy = cv2.findContours(img_blur_edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) # makes coordinates of Convex Hulls in the form of an array of array of coordinates
+# NOTE: "hierarchy" is a list of arrays that correspond to the indices of Convex Hull points such that for each index i in contours list:
+# - hierarchy[0][i][0] presents contour directly NEXT to contours[i]
+# - hierarchy[0][i][1] presents contour directly PREVIOUS to contours[i]
+# - hierarchy[0][i][2] presents first child of contour[i], i.e. first contour inside contour[i]
+# - hierarchy[0][i][3] presents parent of contour[i], i.e. immediate contour surrounding contour[i]
+
 img_hull = makeConvexHull(contours, hierarchy, img, hull)
 
 plt.figure(figsize=(12, 5))
