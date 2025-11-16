@@ -2,13 +2,12 @@
 made from the convex hulls made in ConvexHullTakeTwo.
 Code might be used from https://stackoverflow.com/questions/8919719/how-to-plot-a-complex-polygon"""
 
-import cv2
 import matplotlib.pyplot as plt
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
 import ConvexHullTakeTwo as imgConv
 
-newImage = cv2.imread("house_living_room.jpg")
+newImage = imgConv.getImage()
 print(newImage.shape)
 
 formatHullsx = []
