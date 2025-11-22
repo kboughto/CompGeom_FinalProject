@@ -36,13 +36,16 @@ def makeHierMap(hullIndices, hierarchy):
 # Returns the Hull Points formatted as a dictionary whose
 # keys are the indices of Convex Hulls and the
 # values are the corresponding coordinates
-def getHullPoints():
+def getHullPoints(ptsFile):
     reformatHulls = {}
     for i in range(len(hull)):
         reformatHulls[i] = []
+        ptsFile.write("Hull #" + str(i) + ": \n")
         for bracketedCoords in hull[i]:
             for actualCoords in bracketedCoords:
                 reformatHulls[i].append((int(actualCoords[0]), int(actualCoords[1])))
+                ptsFile.write(str(actualCoords[0]) + "," + str(actualCoords[1]) + "\n")
+        ptsFile.write("\n")
     return reformatHulls
 
 def getImage():
@@ -92,10 +95,11 @@ def makeConvexHulls(contours, hierarchy, img, hullPoints):
         
     return hullPoints
 
+ConvFile = open("ConvexHullPoints.txt", "w")
 img_contours, img_hier = prepImage(img)
 hull = makeConvexHulls(img_contours, img_hier, img, hull)
 # print(hull[0][0][0][1])
-print(getHullPoints())
+getHullPoints(ConvFile)
 
 # img_hull = makeConvexHull(contours, hierarchy, img, hull)
 
