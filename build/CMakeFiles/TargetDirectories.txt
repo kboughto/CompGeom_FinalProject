@@ -1,0 +1,3 @@
+/Users/nadezhdadominguezsalinas/Documents/GitHub/welcome-app/Stat155Final/CompGeom_FinalProject/build/CMakeFiles/final_project.dir
+/Users/nadezhdadominguezsalinas/Documents/GitHub/welcome-app/Stat155Final/CompGeom_FinalProject/build/CMakeFiles/edit_cache.dir
+/Users/nadezhdadominguezsalinas/Documents/GitHub/welcome-app/Stat155Final/CompGeom_FinalProject/build/CMakeFiles/rebuild_cache.dir
