@@ -51,7 +51,10 @@ def getHullPoints(ptsFile):
 def getImage():
     return img
 
-def prepImage(img):
+def prepImage(img, hullFile):
+    hullFile.write("Image coordinates:\n")
+    hullFile.write("0,0\n0," + str(img.shape[0]) + "\n" + str(img.shape[0]) + "," + str(img.shape[1]) + "\n" + str(img.shape[1]) + ",0\n\n")
+
     img_invert = cv2.bitwise_not(img) # turns every pixel of image into its negative. More likely to darken image, which makes edges more apparent
     img_blur = cv2.blur(img_invert, (int(25/1111 * img.shape[0]), int(25/1500 * img.shape[1]))) # blurs the image. Done to make detected edges surround more obvious features of image
 
@@ -96,29 +99,26 @@ def makeConvexHulls(contours, hierarchy, img, hullPoints):
     return hullPoints
 
 ConvFile = open("ConvexHullPoints.txt", "w")
-img_contours, img_hier = prepImage(img)
+img_contours, img_hier = prepImage(img, ConvFile)
 hull = makeConvexHulls(img_contours, img_hier, img, hull)
-# print(hull[0][0][0][1])
 getHullPoints(ConvFile)
 
-img_hull = makeConvexHull(contours, hierarchy, img, hull)
+# plt.figure(figsize=(12, 5))
 
-plt.figure(figsize=(12, 5))
-
-plt.subplot(1, 2, 1)
-plt.imshow(img)
-plt.title("Original Image")
-plt.axis("off")
+# plt.subplot(1, 2, 1)
+# plt.imshow(img)
+# plt.title("Original Image")
+# plt.axis("off")
 
 # plt.subplot(1, 2, 2)
 # plt.imshow(img_blur_edges)
 # plt.title("Canny Edge Image")
 # plt.axis("off")
 
-plt.subplot(1, 2, 2)
-plt.imshow(img_hull)
-plt.title("Hulled Image")
-plt.axis("off")
+# plt.subplot(1, 2, 2)
+# plt.imshow(img_hull)
+# plt.title("Hulled Image")
+# plt.axis("off")
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
