@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_GENERATOR "Unix Makefiles")
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
   "/Users/nadezhdadominguezsalinas/Documents/GitHub/welcome-app/Stat155Final/CompGeom_FinalProject/CMakeLists.txt"
+  "/Users/nadezhdadominguezsalinas/Documents/GitHub/welcome-app/Stat155Final/CompGeom_FinalProject/ConvexHullPoints.txt"
   "CMakeFiles/4.1.2/CMakeCCompiler.cmake"
   "CMakeFiles/4.1.2/CMakeCXXCompiler.cmake"
   "CMakeFiles/4.1.2/CMakeSystem.cmake"
@@ -84,6 +85,7 @@ set(CMAKE_MAKEFILE_OUTPUTS
 
 # Byproducts of CMake generate step:
 set(CMAKE_MAKEFILE_PRODUCTS
+  "ConvexHullPoints.txt"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 

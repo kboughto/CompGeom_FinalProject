@@ -31,5 +31,8 @@ endif()
 # Source Files
 add_executable(final_project CDT.cpp)
 
+# Copying ConvexHull vertices list into the build folder 
+configure_file(ConvexHullPoints.txt ConvexHullPoints.txt COPYONLY)
+
 # Linking CGAL & Boost
 target_link_libraries(final_project CGAL::CGAL Boost::boost)

@@ -1683,6 +1683,7 @@ CMakeFiles/final_project.dir/CDT.cpp.o: /Users/nadezhdadominguezsalinas/Document
   /opt/homebrew/include/CGAL/license/lgpl.h \
   /opt/homebrew/include/CGAL/long_double.h \
   /opt/homebrew/include/CGAL/long_long.h \
+  /opt/homebrew/include/CGAL/mark_domain_in_triangulation.h \
   /opt/homebrew/include/CGAL/memory.h \
   /opt/homebrew/include/CGAL/mpq_class.h \
   /opt/homebrew/include/CGAL/mpz_class.h \
@@ -3727,10 +3728,6 @@ CMakeFiles/final_project.dir/CDT.cpp.o: /Users/nadezhdadominguezsalinas/Document
 
 /opt/homebrew/include/boost/random/binomial_distribution.hpp:
 
-/opt/homebrew/include/boost/intrusive/detail/workaround.hpp:
-
-/opt/homebrew/include/boost/type_traits/intrinsics.hpp:
-
 /opt/homebrew/include/boost/core/yield_primitives.hpp:
 
 /opt/homebrew/include/boost/stl_interfaces/iterator_interface.hpp:
@@ -4847,6 +4844,8 @@ CMakeFiles/final_project.dir/CDT.cpp.o: /Users/nadezhdadominguezsalinas/Document
 
 /opt/homebrew/include/boost/mpl/aux_/config/lambda.hpp:
 
+/opt/homebrew/include/CGAL/mark_domain_in_triangulation.h:
+
 /opt/homebrew/include/boost/mpl/apply_fwd.hpp:
 
 /opt/homebrew/include/boost/math/tools/assert.hpp:
@@ -5036,6 +5035,10 @@ CMakeFiles/final_project.dir/CDT.cpp.o: /Users/nadezhdadominguezsalinas/Document
 /opt/homebrew/include/CGAL/Cartesian/plane_constructions_3.h:
 
 /opt/homebrew/include/boost/intrusive/list.hpp:
+
+/opt/homebrew/include/boost/type_traits/intrinsics.hpp:
+
+/opt/homebrew/include/boost/intrusive/detail/workaround.hpp:
 
 /opt/homebrew/include/boost/mpl/has_key.hpp:
 
