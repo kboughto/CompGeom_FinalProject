@@ -3317,4 +3317,5 @@ CMakeFiles/final_project.dir/CDT.cpp.o: \
   /opt/homebrew/include/CGAL/Random.h \
   /opt/homebrew/include/CGAL/Random_impl.h \
   /opt/homebrew/include/CGAL/Buffer_for_vao.h \
-  /opt/homebrew/include/CGAL/Graphics_scene_options.h
+  /opt/homebrew/include/CGAL/Graphics_scene_options.h \
+  /opt/homebrew/include/CGAL/mark_domain_in_triangulation.h
