@@ -6,7 +6,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 # Initializes variables
-img = cv2.imread("sample_classrooms/circle_classroom.png")
+img = cv2.imread("sample_classrooms/graph_classroom.png")
 hull = []
 
 # Given a contour in the form of a hierarchy array and the list of hierarchy arrays,
@@ -102,13 +102,15 @@ ConvFile = open("ConvexHullPoints.txt", "w")
 img_contours, img_hier = prepImage(img, ConvFile)
 hull = makeConvexHulls(img_contours, img_hier, img, hull)
 getHullPoints(ConvFile)
+drawContoursOntoImage(img, hull)
+ConvFile.close()
 
-# plt.figure(figsize=(12, 5))
+plt.figure(figsize=(12, 5))
 
-# plt.subplot(1, 2, 1)
-# plt.imshow(img)
-# plt.title("Original Image")
-# plt.axis("off")
+plt.subplot(1, 2, 1)
+plt.imshow(img)
+plt.title("Original Image")
+plt.axis("off")
 
 # plt.subplot(1, 2, 2)
 # plt.imshow(img_blur_edges)
@@ -120,5 +122,5 @@ getHullPoints(ConvFile)
 # plt.title("Hulled Image")
 # plt.axis("off")
 
-# plt.tight_layout()
-# plt.show()
+plt.tight_layout()
+plt.show()
