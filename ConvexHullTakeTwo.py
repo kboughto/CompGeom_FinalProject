@@ -53,7 +53,7 @@ def getImage():
 
 def prepImage(img, hullFile):
     hullFile.write("Image coordinates:\n")
-    hullFile.write("0,0\n0," + str(img.shape[0]) + "\n" + str(img.shape[0]) + "," + str(img.shape[1]) + "\n" + str(img.shape[1]) + ",0\n\n")
+    hullFile.write("0,0\n" + str(img.shape[1]) + ",0\n" + str(img.shape[0]) + "," + str(img.shape[1]) + "\n0," + str(img.shape[0]) + "\n\n")
 
     img_invert = cv2.bitwise_not(img) # turns every pixel of image into its negative. More likely to darken image, which makes edges more apparent
     img_blur = cv2.blur(img_invert, (int(25/1111 * img.shape[0]), int(25/1500 * img.shape[1]))) # blurs the image. Done to make detected edges surround more obvious features of image
