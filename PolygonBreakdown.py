@@ -182,6 +182,14 @@ startCent = closestCent(centroids, startPoint)
 endCent = closestCent(centroids, endPoint)
 print(startCent, endCent)
 
-# Use Djistras Algorithm on our Networkx Centroid Graph
+# Use Djikstras Algorithm on our Networkx Centroid Graph
 shortestPath = nx.dijkstra_path(centroid_Graph, startCent, endCent, weight = 'weight')
 print(shortestPath)
+
+shortPathCoords = [centroids[n] for n in shortestPath]
+shortPathX = [p[0] for p in shortPathCoords]
+shortPathY = [p[1] for p in shortPathCoords]
+
+axes.plot(shortPathX, shortPathY, color = 'red')
+axes.scatter(shortPathX, shortPathY, color ='red', s=10)
+plt.savefig("shortestPathGraph.png")
