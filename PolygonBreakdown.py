@@ -103,7 +103,7 @@ for coords in triPtsList:
     pathCoords = coords.copy()
     pathCoords.append((0,0))
     path = Path(pathCoords,[Path.MOVETO,Path.LINETO,Path.LINETO,Path.CLOSEPOLY])
-    patch = PathPatch(path, facecolor = 'none',edgecolor='black',linewidth=0.4)
+    patch = PathPatch(path, edgecolor='black',linewidth=0.4)
     axes.add_patch(patch)
 
 xs = [c[0] for c in centroids]
@@ -113,3 +113,53 @@ axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 plt.show()
 plt.savefig("img_holes_cent.png")
+
+def createCentroidGraph(triangles):
+    centGraph = nx.Graph()
+    
+    # Adding the centroids of the CDT as nodes in the graph
+    for i, tri in enumerate(triangles.geoms):
+        c = shapely.centroid(tri)
+        centGraph.add_node(i, pos = (c.x, c.y))
+
+    # Adding the edges between centroids of adjacent triangles
+    for i in range(len(triangles.geoms)):
+        for j in range(i+1, len(triangles.geoms)):
+            firstTri = triangles.geoms[i]
+            secondTri = triangles.geoms[j]
+
+            # For adjacent triangles add an edge
+            if firstTri.intersects(secondTri) and firstTri.boundary.intersects(secondTri.boundary):
+                firstTriCentroid = firstTri.centroid
+                secondTriCentroid = secondTri.centroid
+                distCentroids = firstTriCentroid.distance(secondTriCentroid)
+                centGraph.add_edge(i,j, weight = distCentroids)
+    
+    return centGraph
+
+centroid_Graph = createCentroidGraph(triPoints)
+
+
+axes = plt.gca()
+centroids = makeCentroids(triPoints)
+
+for node in centroid_Graph:
+    x1,y1 = centroids[node]
+    for neighbor, i in centroid_Graph[node]:
+        x2,y2 = centroids[neighbor]
+        axes.plot([x1,x2],[y1,y2], color = 'lightgray')
+
+for coords in triPtsList:
+    pathCoords = coords.copy()
+    pathCoords.append((0,0))
+    path = Path(pathCoords,[Path.MOVETO,Path.LINETO,Path.LINETO,Path.CLOSEPOLY])
+    patch = PathPatch(path, edgecolor='black',linewidth=0.4)
+    axes.add_patch(patch)
+
+xs = [c[0] for c in centroids]
+ys = [c[1] for c in centroids]
+axes.scatter(xs,ys, color = 'pink', s=10)
+axes.set_xlim(0,newImage.shape[1])
+axes.set_ylim(0,newImage.shape[0])
+plt.show()
+plt.savefig("img_holes_cent2.png")
