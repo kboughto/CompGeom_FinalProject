@@ -153,9 +153,6 @@ for node in centroid_Graph:
         x2,y2 = centroids[neighbor]
         axes.plot([x1,x2],[y1,y2], color = 'lightgray')
 
-xs = [c[0] for c in centroids]
-ys = [c[1] for c in centroids]
-axes.scatter(xs,ys, color = 'pink', s=10)
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 plt.savefig("img_holes_cent2.png")
