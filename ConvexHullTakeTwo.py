@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 
 # Initializes variables
 img = cv2.imread("sample_classrooms/graph_classroom.png")
-hull = []
 
 # Given a contour in the form of a hierarchy array and the list of hierarchy arrays,
 # it determines the hierarchy of the contour
@@ -36,24 +35,24 @@ def makeHierMap(hullIndices, hierarchy):
 # Returns the Hull Points formatted as a dictionary whose
 # keys are the indices of Convex Hulls and the
 # values are the corresponding coordinates
-def getHullPoints(ptsFile):
-    reformatHulls = {}
-    for i in range(len(hull)):
-        reformatHulls[i] = []
-        ptsFile.write("Hull #" + str(i) + ": \n")
-        for bracketedCoords in hull[i]:
+def reformatHullPoints(hullPts):
+    reformatHulls = []
+    for i in range(len(hullPts)):
+        reformatHulls.append([])
+        # ptsFile.write("Hull #" + str(i) + ": \n")
+        for bracketedCoords in hullPts[i]:
             for actualCoords in bracketedCoords:
                 reformatHulls[i].append((int(actualCoords[0]), int(actualCoords[1])))
-                ptsFile.write(str(actualCoords[0]) + "," + str(actualCoords[1]) + "\n")
-        ptsFile.write("\n")
+                # ptsFile.write(str(actualCoords[0]) + "," + str(actualCoords[1]) + "\n")
+        # ptsFile.write("\n")
     return reformatHulls
 
 def getImage():
     return img
 
-def prepImage(img, hullFile):
-    hullFile.write("Image coordinates:\n")
-    hullFile.write("0,0\n" + str(img.shape[1]) + ",0\n" + str(img.shape[0]) + "," + str(img.shape[1]) + "\n0," + str(img.shape[0]) + "\n\n")
+def prepImage(img):
+    # hullFile.write("Image coordinates:\n")
+    # hullFile.write("0,0\n" + str(img.shape[1]) + ",0\n" + str(img.shape[0]) + "," + str(img.shape[1]) + "\n0," + str(img.shape[0]) + "\n\n")
 
     img_invert = cv2.bitwise_not(img) # turns every pixel of image into its negative. More likely to darken image, which makes edges more apparent
     img_blur = cv2.blur(img_invert, (int(25/1111 * img.shape[0]), int(25/1500 * img.shape[1]))) # blurs the image. Done to make detected edges surround more obvious features of image
@@ -70,6 +69,7 @@ def prepImage(img, hullFile):
     
     return contours, hierarchy
 
+# actually draws the convex hulls onto the given image
 def drawContoursOntoImage(img, hullPts): 
     # draw contours and hull points
     for i in range(len(hullPts)):
@@ -80,9 +80,10 @@ def drawContoursOntoImage(img, hullPts):
 # Given an image, contours from the image's edges and an empty list, 
 # polygons approximately cover significant objects on the image.
 # Returns that edited image
-def makeConvexHulls(contours, hierarchy, img, hullPoints):
+def makeConvexHulls(contours, hierarchy, img, reformat=True):
     imgArea = img.shape[0] * img.shape[1] # area of original image
     hullIndices = []
+    hullPoints = []
     for i in range(len(contours)):
         # creating convex hull object for each contour
         if cv2.contourArea(contours[i])/imgArea < 0.05: # hulls must be smaller than 5% of the image
@@ -95,22 +96,21 @@ def makeConvexHulls(contours, hierarchy, img, hullPoints):
         hullLenDict[len(hierMap[hier])] = hier
     
     hullPoints = [hullPoints[ind] for ind in hierMap[hullLenDict[min(hullLenDict.keys())]]] # captures all Convex Hull points from the hierarchy tier with the least # of hulls
-        
+    if reformat:
+        hullPoints = reformatHullPoints(hullPoints)
+    
     return hullPoints
 
-ConvFile = open("ConvexHullPoints.txt", "w")
-img_contours, img_hier = prepImage(img, ConvFile)
-hull = makeConvexHulls(img_contours, img_hier, img, hull)
-getHullPoints(ConvFile)
-drawContoursOntoImage(img, hull)
-ConvFile.close()
+# img_contours, img_hier = prepImage(img)
+# hulls = makeConvexHulls(img_contours, img_hier, img, reformat=False)
+# drawContoursOntoImage(img, hulls)
 
-plt.figure(figsize=(12, 5))
+# plt.figure(figsize=(12, 5))
 
-plt.subplot(1, 2, 1)
-plt.imshow(img)
-plt.title("Original Image")
-plt.axis("off")
+# plt.subplot(1, 2, 1)
+# plt.imshow(img)
+# plt.title("Original Image")
+# plt.axis("off")
 
 # plt.subplot(1, 2, 2)
 # plt.imshow(img_blur_edges)
@@ -122,5 +122,5 @@ plt.axis("off")
 # plt.title("Hulled Image")
 # plt.axis("off")
 
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
