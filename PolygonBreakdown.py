@@ -11,6 +11,7 @@ from matplotlib.patches import PathPatch
 from matplotlib.path import Path
 import shapely
 import ConvexHullTakeTwo as imgConv
+import networkx as nx
 
 newImage = imgConv.getImage()
 img_contours, img_hier = imgConv.prepImage(newImage)
@@ -93,6 +94,13 @@ def makeCentroids(triPts):
         centroidsCDT.append((cent.x, cent.y))
     return centroidsCDT
 
+def lineIntersectsPoly(line, polyCoords):
+    for hull in polyCoords:
+        hulPoly = shapely.Polygon(hull)
+        if hulPoly.boundary.intersects(line):
+            return True
+    return False
+
 print(len(triPoints.geoms))
 
 
@@ -114,7 +122,7 @@ axes.set_ylim(0,newImage.shape[0])
 plt.show()
 plt.savefig("img_holes_cent.png")
 
-def createCentroidGraph(triangles):
+def createCentroidGraph(triangles, hullPts):
     centGraph = nx.Graph()
     
     # Adding the centroids of the CDT as nodes in the graph
@@ -132,12 +140,14 @@ def createCentroidGraph(triangles):
             if firstTri.intersects(secondTri) and firstTri.boundary.intersects(secondTri.boundary):
                 firstTriCentroid = firstTri.centroid
                 secondTriCentroid = secondTri.centroid
-                distCentroids = firstTriCentroid.distance(secondTriCentroid)
-                centGraph.add_edge(i,j, weight = distCentroids)
+                centroidLine = shapely.LineString([(firstTriCentroid.x, firstTriCentroid.y), (secondTriCentroid.x, secondTriCentroid.y)])
+                if not lineIntersectsPoly(centroidLine, hullPts):
+                    distCentroids = firstTriCentroid.distance(secondTriCentroid)
+                    centGraph.add_edge(i,j, weight = distCentroids)
     
     return centGraph
 
-centroid_Graph = createCentroidGraph(triPoints)
+centroid_Graph = createCentroidGraph(triPoints, hulls)
 
 
 axes = plt.gca()
@@ -145,7 +155,7 @@ centroids = makeCentroids(triPoints)
 
 for node in centroid_Graph:
     x1,y1 = centroids[node]
-    for neighbor, i in centroid_Graph[node]:
+    for neighbor, i in centroid_Graph[node].items():
         x2,y2 = centroids[neighbor]
         axes.plot([x1,x2],[y1,y2], color = 'lightgray')
 
