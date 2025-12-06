@@ -54,17 +54,17 @@ def makePathFriendly(extPts, interPts):
     return ptList, actList
 
 # This part displays the classroom polygon with holes and saves it as "img_hole.png"
-axes = plt.gca()
-ext = [(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)]
-inter = hulls
-points, actions = makePathFriendly(ext, inter)
-path = Path(points, actions)
-patch = PathPatch(path)
-axes.set_xlim(0,newImage.shape[1])
-axes.set_ylim(0,newImage.shape[0])
-axes.add_patch(patch)
+# axes = plt.gca()
+# ext = [(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)]
+# inter = hulls
+# points, actions = makePathFriendly(ext, inter)
+# path = Path(points, actions)
+# patch = PathPatch(path)
+# axes.set_xlim(0,newImage.shape[1])
+# axes.set_ylim(0,newImage.shape[0])
+# axes.add_patch(patch)
 
-plt.savefig("img_hole.png")
+# plt.savefig("img_hole.png")
 
 # makes polygon of classroom with hulls as holes
 points = shapely.Polygon([(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)], holes=hulls)
@@ -72,15 +72,25 @@ triPoints = shapely.constrained_delaunay_triangles(points).normalize() # the tri
 triPtsList = formatPolyPts(triPoints)
 
 # This part displays the TRIANGULATION of the classroom polygon with holes and saves it as "img_triangulation.png"
-axesTwo = plt.gca()
-for coords in triPtsList: # iterates through triangles in triangulation
-    pathCoords = coords.copy()
-    pathCoords.append((0, 0))
-    path = Path(pathCoords, [Path.MOVETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY])
-    patch = PathPatch(path)
-    axesTwo.add_patch(patch)
-axesTwo.set_xlim(0,newImage.shape[1])
-axesTwo.set_ylim(0,newImage.shape[0])
+# axesTwo = plt.gca()
+# for coords in triPtsList: # iterates through triangles in triangulation
+#     pathCoords = coords.copy()
+#     pathCoords.append((0, 0))
+#     path = Path(pathCoords, [Path.MOVETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY])
+#     patch = PathPatch(path)
+#     axesTwo.add_patch(patch)
+# axesTwo.set_xlim(0,newImage.shape[1])
+# axesTwo.set_ylim(0,newImage.shape[0])
 
-plt.savefig("img_tringulate.png")
-plt.close("all")
+# plt.savefig("img_tringulate.png")
+# plt.close("all")
+
+"""Start of centroil computation from CDT"""
+def makeCentroids(triPts):
+    centroidsCDT = []
+    for tri in triPts.geoms:
+        cent = shapely.centroid(tri)
+        centroidsCDT.append((cent.x, cent.y))
+    return centroidsCDT
+
+print(len(triPoints.geoms))
