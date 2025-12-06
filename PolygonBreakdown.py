@@ -156,7 +156,6 @@ for node in centroid_Graph:
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 plt.savefig("img_holes_cent2.png")
-plt.close("all")
 
 """Finding the closest centroid to the point in the classroom environment"""
 def closestCent(centroids, point):
@@ -173,15 +172,13 @@ def closestCent(centroids, point):
 
 # Finding the closest centroid to the starting and end point for the robot
 startPoint = (0,0)
-endPoint = (newImage.shape[0],newImage.shape[1])
+endPoint = (newImage.shape[1], newImage.shape[0])
 
 startCent = closestCent(centroids, startPoint)
 endCent = closestCent(centroids, endPoint)
-print(startCent, endCent)
 
 # Use Djikstras Algorithm on our Networkx Centroid Graph
 shortestPath = nx.dijkstra_path(centroid_Graph, startCent, endCent, weight = 'weight')
-print(shortestPath)
 
 shortPathCoords = [centroids[n] for n in shortestPath]
 shortPathX = [p[0] for p in shortPathCoords]
@@ -190,3 +187,4 @@ shortPathY = [p[1] for p in shortPathCoords]
 axes.plot(shortPathX, shortPathY, color = 'red')
 axes.scatter(shortPathX, shortPathY, color ='red', s=10)
 plt.savefig("shortestPathGraph.png")
+plt.close("all")
