@@ -164,14 +164,14 @@ plt.close("all")
 """Finding the closest centroid to the point in the classroom environment"""
 def closestCent(centroids, point):
     x,y = point
-    bestCent = None
-    bestDist - float('inf')
+    bestCent = 0
+    bestDist = float("inf")
 
-    for coord in centroids:
-        d = ((x-coord[0])**2) + ((y-coord[1])**2)**0.5
+    for i in range(len(centroids)):
+        d = (((x-centroids[i][0])**2) + ((y-centroids[i][1])**2))**0.5
         if d < bestDist:
             bestDist = d
-            bestCent = coord
+            bestCent = i
     return bestCent
 
 # Finding the closest centroid to the starting and end point for the robot
@@ -179,7 +179,9 @@ startPoint = (0,0)
 endPoint = (newImage.shape[0],newImage.shape[1])
 
 startCent = closestCent(centroids, startPoint)
-endCent = closestCent(centroids, startPoint)
+endCent = closestCent(centroids, endPoint)
+print(startCent, endCent)
 
 # Use Djistras Algorithm on our Networkx Centroid Graph
 shortestPath = nx.dijkstra_path(centroid_Graph, startCent, endCent, weight = 'weight')
+print(shortestPath)
