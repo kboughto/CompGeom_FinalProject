@@ -18,7 +18,7 @@ hulls = imgConv.makeConvexHulls(img_contours, img_hier, newImage)
 # print(newImage.shape)
 
 """Given a sequence of Geometric objects (Shapely exlcusive object)
-This reformats them into properly readable points. It returns a list of a list of tuples!"""
+This reformats them into properly readable coordinate points. It returns a list of a list of tuples!"""
 def formatPolyPts(polyTri):
     polyPts = []
     for i in range(len(polyTri.geoms)):
