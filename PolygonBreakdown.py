@@ -84,7 +84,9 @@ def createCentroidGraph(triangles, hullPts):
     
     return centGraph
 
-"""Start of centroid computation from CDT"""
+"""
+Given the sequence of Triangles, it computes its centroids and stores them as a list of tuples.
+"""
 def makeCentroids(triPts):
     centroidsCDT = []
     for tri in triPts.geoms:
