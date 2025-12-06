@@ -1,5 +1,5 @@
 """
-Author: Keshawn Boughton
+Author: Keshawn Boughton & Nadezhda Dominguez Salinas
 This attempts to first plot a rectangle of the dimensions of a given image with 'holes'
 made from the convex hulls made in ConvexHullTakeTwo.py.
 Code for triangulation used from: https://shapely.readthedocs.io/en/2.1.2/reference/shapely.constrained_delaunay_triangles.html
@@ -85,7 +85,7 @@ triPtsList = formatPolyPts(triPoints)
 # plt.savefig("img_tringulate.png")
 # plt.close("all")
 
-"""Start of centroil computation from CDT"""
+"""Start of centroid computation from CDT"""
 def makeCentroids(triPts):
     centroidsCDT = []
     for tri in triPts.geoms:
@@ -94,3 +94,22 @@ def makeCentroids(triPts):
     return centroidsCDT
 
 print(len(triPoints.geoms))
+
+
+axes = plt.gca()
+centroids = makeCentroids(triPoints)
+
+for coords in triPtsList:
+    pathCoords = coords.copy()
+    pathCoords.append((0,0))
+    path = Path(pathCoords,[Path.MOVETO,Path.LINETO,Path.LINETO,Path.CLOSEPOLY])
+    patch = PathPatch(path, facecolor = 'none',edgecolor='black',linewidth=0.4)
+    axes.add_patch(patch)
+
+xs = [c[0] for c in centroids]
+ys = [c[1] for c in centroids]
+axes.scatter(xs,ys, color = 'pink', s=10)
+axes.set_xlim(0,newImage.shape[1])
+axes.set_ylim(0,newImage.shape[0])
+plt.show()
+plt.savefig("img_holes_cent.png")
