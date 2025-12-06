@@ -54,74 +54,6 @@ def makePathFriendly(extPts, interPts):
         ptList.append((0, 0))
     return ptList, actList
 
-# This part displays the classroom polygon with holes and saves it as "img_hole.png"
-# axes = plt.gca()
-# ext = [(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)]
-# inter = hulls
-# points, actions = makePathFriendly(ext, inter)
-# path = Path(points, actions)
-# patch = PathPatch(path)
-# axes.set_xlim(0,newImage.shape[1])
-# axes.set_ylim(0,newImage.shape[0])
-# axes.add_patch(patch)
-
-# plt.savefig("img_hole.png")
-
-# makes polygon of classroom with hulls as holes
-points = shapely.Polygon([(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)], holes=hulls)
-triPoints = shapely.constrained_delaunay_triangles(points).normalize() # the triangulation!
-triPtsList = formatPolyPts(triPoints)
-
-# This part displays the TRIANGULATION of the classroom polygon with holes and saves it as "img_triangulation.png"
-# axesTwo = plt.gca()
-# for coords in triPtsList: # iterates through triangles in triangulation
-#     pathCoords = coords.copy()
-#     pathCoords.append((0, 0))
-#     path = Path(pathCoords, [Path.MOVETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY])
-#     patch = PathPatch(path)
-#     axesTwo.add_patch(patch)
-# axesTwo.set_xlim(0,newImage.shape[1])
-# axesTwo.set_ylim(0,newImage.shape[0])
-
-# plt.savefig("img_tringulate.png")
-# plt.close("all")
-
-"""Start of centroid computation from CDT"""
-def makeCentroids(triPts):
-    centroidsCDT = []
-    for tri in triPts.geoms:
-        cent = shapely.centroid(tri)
-        centroidsCDT.append((cent.x, cent.y))
-    return centroidsCDT
-
-def lineIntersectsPoly(line, polyCoords):
-    for hull in polyCoords:
-        hulPoly = shapely.Polygon(hull)
-        if hulPoly.boundary.intersects(line):
-            return True
-    return False
-
-print(len(triPoints.geoms))
-
-
-axes = plt.gca()
-centroids = makeCentroids(triPoints)
-
-for coords in triPtsList:
-    pathCoords = coords.copy()
-    pathCoords.append((0,0))
-    path = Path(pathCoords,[Path.MOVETO,Path.LINETO,Path.LINETO,Path.CLOSEPOLY])
-    patch = PathPatch(path, edgecolor='black',linewidth=0.4)
-    axes.add_patch(patch)
-
-xs = [c[0] for c in centroids]
-ys = [c[1] for c in centroids]
-axes.scatter(xs,ys, color = 'pink', s=10)
-axes.set_xlim(0,newImage.shape[1])
-axes.set_ylim(0,newImage.shape[0])
-plt.show()
-plt.savefig("img_holes_cent.png")
-
 def createCentroidGraph(triangles, hullPts):
     centGraph = nx.Graph()
     
@@ -147,17 +79,62 @@ def createCentroidGraph(triangles, hullPts):
     
     return centGraph
 
-centroid_Graph = createCentroidGraph(triPoints, hulls)
+"""Start of centroid computation from CDT"""
+def makeCentroids(triPts):
+    centroidsCDT = []
+    for tri in triPts.geoms:
+        cent = shapely.centroid(tri)
+        centroidsCDT.append((cent.x, cent.y))
+    return centroidsCDT
+
+"""
+Given a LineString and a list of list of coordinates as tuples,
+it checks whether the line intersects any of the hulls.
+"""
+def lineIntersectsPoly(line, polyCoords):
+    for hull in polyCoords:
+        hulPoly = shapely.Polygon(hull)
+        if hulPoly.boundary.intersects(line):
+            return True
+    return False
+
+# This part displays the classroom polygon with holes and saves it as "img_hole.png"
+axes = plt.gca()
+ext = [(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)]
+inter = hulls
+points, actions = makePathFriendly(ext, inter)
+path = Path(points, actions)
+patch = PathPatch(path)
+axes.set_xlim(0,newImage.shape[1])
+axes.set_ylim(0,newImage.shape[0])
+axes.add_patch(patch)
+
+# plt.savefig("img_hole.png")
+
+# makes polygon of classroom with hulls as holes
+points = shapely.Polygon([(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)], holes=hulls)
+triPoints = shapely.constrained_delaunay_triangles(points).normalize() # the triangulation!
+triPtsList = formatPolyPts(triPoints)
+
+# This part displays the TRIANGULATION of the classroom polygon with holes and saves it as "img_triangulation.png"
+axesTwo = plt.gca()
+for coords in triPtsList: # iterates through triangles in triangulation
+    pathCoords = coords.copy()
+    pathCoords.append((0, 0))
+    path = Path(pathCoords, [Path.MOVETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY])
+    patch = PathPatch(path)
+    axesTwo.add_patch(patch)
+axesTwo.set_xlim(0,newImage.shape[1])
+axesTwo.set_ylim(0,newImage.shape[0])
+
+plt.savefig("img_tringulate.png")
+plt.close("all")
+
+print(len(triPoints.geoms))
 
 
 axes = plt.gca()
 centroids = makeCentroids(triPoints)
-
-for node in centroid_Graph:
-    x1,y1 = centroids[node]
-    for neighbor, i in centroid_Graph[node].items():
-        x2,y2 = centroids[neighbor]
-        axes.plot([x1,x2],[y1,y2], color = 'lightgray')
 
 for coords in triPtsList:
     pathCoords = coords.copy()
@@ -171,5 +148,21 @@ ys = [c[1] for c in centroids]
 axes.scatter(xs,ys, color = 'pink', s=10)
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
-plt.show()
+plt.savefig("img_holes_cent.png")
+
+centroid_Graph = createCentroidGraph(triPoints, hulls)
+centroids = makeCentroids(triPoints)
+
+for node in centroid_Graph:
+    x1,y1 = centroids[node]
+    for neighbor, i in centroid_Graph[node].items():
+        x2,y2 = centroids[neighbor]
+        axes.plot([x1,x2],[y1,y2], color = 'lightgray')
+
+xs = [c[0] for c in centroids]
+ys = [c[1] for c in centroids]
+axes.scatter(xs,ys, color = 'pink', s=10)
+axes.set_xlim(0,newImage.shape[1])
+axes.set_ylim(0,newImage.shape[0])
 plt.savefig("img_holes_cent2.png")
+plt.close()
