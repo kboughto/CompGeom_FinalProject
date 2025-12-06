@@ -54,6 +54,11 @@ def makePathFriendly(extPts, interPts):
         ptList.append((0, 0))
     return ptList, actList
 
+"""
+Given the sequence of Triangules (again, Shapely exclusive object) and the hull points (in the form of a list of a list of tuples),
+This creates the graph such that its edges do not leave the triangulated polygon.
+Returns a graph made with Networkx.
+"""
 def createCentroidGraph(triangles, hullPts):
     centGraph = nx.Graph()
     
@@ -108,8 +113,7 @@ patch = PathPatch(path)
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 axes.add_patch(patch)
-
-# plt.savefig("img_hole.png")
+plt.savefig("img_hole.png")
 
 # makes polygon of classroom with hulls as holes
 points = shapely.Polygon([(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)], holes=hulls)
@@ -117,31 +121,19 @@ triPoints = shapely.constrained_delaunay_triangles(points).normalize() # the tri
 triPtsList = formatPolyPts(triPoints)
 
 # This part displays the TRIANGULATION of the classroom polygon with holes and saves it as "img_triangulation.png"
-axesTwo = plt.gca()
 for coords in triPtsList: # iterates through triangles in triangulation
     pathCoords = coords.copy()
     pathCoords.append((0, 0))
     path = Path(pathCoords, [Path.MOVETO, Path.LINETO, Path.LINETO, Path.CLOSEPOLY])
     patch = PathPatch(path)
-    axesTwo.add_patch(patch)
-axesTwo.set_xlim(0,newImage.shape[1])
-axesTwo.set_ylim(0,newImage.shape[0])
+    axes.add_patch(patch)
+axes.set_xlim(0,newImage.shape[1])
+axes.set_ylim(0,newImage.shape[0])
 
 plt.savefig("img_tringulate.png")
-plt.close("all")
 
-print(len(triPoints.geoms))
-
-
-axes = plt.gca()
+# This part adds the centroids to the triangulated classroom
 centroids = makeCentroids(triPoints)
-
-for coords in triPtsList:
-    pathCoords = coords.copy()
-    pathCoords.append((0,0))
-    path = Path(pathCoords,[Path.MOVETO,Path.LINETO,Path.LINETO,Path.CLOSEPOLY])
-    patch = PathPatch(path, edgecolor='black',linewidth=0.4)
-    axes.add_patch(patch)
 
 xs = [c[0] for c in centroids]
 ys = [c[1] for c in centroids]
@@ -165,4 +157,4 @@ axes.scatter(xs,ys, color = 'pink', s=10)
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 plt.savefig("img_holes_cent2.png")
-plt.close()
+plt.close("all")
