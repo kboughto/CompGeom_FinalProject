@@ -8,8 +8,8 @@ right = LargeMotor(OUTPUT_C)
 print("Motor test starting")
 
 # forward 1 rotation
-left.on_for_rotations(20, 1)
-right.on_for_rotations(20, 1)
+left.on_for_rotations(50, 1) # run at 20% speed for 1 rotation
+right.on_for_rotations(50, 1) # run at 20% speed for 1 rotation
 
 sleep(0.5)
 

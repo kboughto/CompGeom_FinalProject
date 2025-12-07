@@ -118,6 +118,20 @@ def closestCent(centroids, point):
             bestCent = i
     return bestCent
 
+def getShortestPathCoords(hullPts, img):
+    points = shapely.Polygon([(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)], holes=hulls)
+    triPoints = shapely.constrained_delaunay_triangles(points).normalize() # the triangulation!
+    centGraph = createCentroidGraph(triPoints, hullPts)
+    startPoint = (0,0)
+    endPoint = (img.shape[1], img.shape[0])
+    startCent = closestCent(centroids, startPoint)
+    endCent = closestCent(centroids, endPoint)
+
+    # Use Djikstras Algorithm on our Networkx Centroid Graph
+    shortestPath = nx.dijkstra_path(centGraph, startCent, endCent, weight = 'weight')
+    shortPathCoords = [centroids[n] for n in shortestPath]
+    return shortPathCoords
+
 # This part displays the classroom polygon with holes and saves it as "img_hole.png"
 axes = plt.gca()
 ext = [(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)]
