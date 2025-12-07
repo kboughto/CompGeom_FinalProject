@@ -1,24 +1,20 @@
-#!/usr/bin/env pybricks-micropython
-from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import Motor
-from pybricks.parameters import Port
-from pybricks.tools import wait
+#!/usr/bin/env python3
+from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C
+from time import sleep
 
-# Initialize EV3 and motors
-ev3 = EV3Brick()
-left = Motor(Port.B)
-right = Motor(Port.C)
+left = LargeMotor(OUTPUT_B)
+right = LargeMotor(OUTPUT_C)
 
-ev3.speaker.say("Motor test starting")
+print("Motor test starting")
 
-# Rotate both motors forward
-left.run_angle(300, 360)   # speed deg/s, angle deg
-right.run_angle(300, 360)
+# forward 1 rotation
+left.on_for_rotations(20, 1)
+right.on_for_rotations(20, 1)
 
-wait(500)
+sleep(0.5)
 
-# Rotate both motors backward
-left.run_angle(300, -360)
-right.run_angle(300, -360)
+# backward 1 rotation
+left.on_for_rotations(20, -1)
+right.on_for_rotations(20, -1)
 
-ev3.speaker.say("Test complete")
+print("Motor test complete")
