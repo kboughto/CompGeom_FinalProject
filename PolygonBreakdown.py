@@ -105,6 +105,19 @@ def lineIntersectsPoly(line, polyCoords):
             return True
     return False
 
+"""Finding the closest centroid to the point in the classroom environment"""
+def closestCent(centroids, point):
+    x,y = point
+    bestCent = 0
+    bestDist = float("inf")
+
+    for i in range(len(centroids)):
+        d = (((x-centroids[i][0])**2) + ((y-centroids[i][1])**2))**0.5
+        if d < bestDist:
+            bestDist = d
+            bestCent = i
+    return bestCent
+
 # This part displays the classroom polygon with holes and saves it as "img_hole.png"
 axes = plt.gca()
 ext = [(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)]
@@ -115,7 +128,7 @@ patch = PathPatch(path)
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 axes.add_patch(patch)
-plt.savefig("img_hole.png")
+plt.savefig("path_progression/img_hole.png")
 
 # makes polygon of classroom with hulls as holes
 points = shapely.Polygon([(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)], holes=hulls)
@@ -132,7 +145,7 @@ for coords in triPtsList: # iterates through triangles in triangulation
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 
-plt.savefig("img_tringulate.png")
+plt.savefig("path_progression/img_triangulate.png")
 
 # This part adds the centroids to the triangulated classroom
 centroids = makeCentroids(triPoints)
@@ -142,7 +155,7 @@ ys = [c[1] for c in centroids]
 axes.scatter(xs,ys, color = 'pink', s=10)
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
-plt.savefig("img_holes_cent.png")
+plt.savefig("path_progression/img_holes_cent.png")
 
 centroid_Graph = createCentroidGraph(triPoints, hulls)
 centroids = makeCentroids(triPoints)
@@ -155,20 +168,7 @@ for node in centroid_Graph:
 
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
-plt.savefig("img_holes_cent2.png")
-
-"""Finding the closest centroid to the point in the classroom environment"""
-def closestCent(centroids, point):
-    x,y = point
-    bestCent = 0
-    bestDist = float("inf")
-
-    for i in range(len(centroids)):
-        d = (((x-centroids[i][0])**2) + ((y-centroids[i][1])**2))**0.5
-        if d < bestDist:
-            bestDist = d
-            bestCent = i
-    return bestCent
+plt.savefig("path_progression/img_holes_graph.png")
 
 # Finding the closest centroid to the starting and end point for the robot
 startPoint = (0,0)
@@ -186,5 +186,5 @@ shortPathY = [p[1] for p in shortPathCoords]
 
 axes.plot(shortPathX, shortPathY, color = 'red')
 axes.scatter(shortPathX, shortPathY, color ='red', s=10)
-plt.savefig("shortestPathGraph.png")
+plt.savefig("path_progression/shortestPathGraph.png")
 plt.close("all")
