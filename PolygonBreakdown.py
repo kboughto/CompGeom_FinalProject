@@ -105,6 +105,19 @@ def lineIntersectsPoly(line, polyCoords):
             return True
     return False
 
+"""Finding the closest centroid to the point in the classroom environment"""
+def closestCent(centroids, point):
+    x,y = point
+    bestCent = 0
+    bestDist = float("inf")
+
+    for i in range(len(centroids)):
+        d = (((x-centroids[i][0])**2) + ((y-centroids[i][1])**2))**0.5
+        if d < bestDist:
+            bestDist = d
+            bestCent = i
+    return bestCent
+
 # This part displays the classroom polygon with holes and saves it as "img_hole.png"
 axes = plt.gca()
 ext = [(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)]
@@ -156,19 +169,6 @@ for node in centroid_Graph:
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 plt.savefig("img_holes_cent2.png")
-
-"""Finding the closest centroid to the point in the classroom environment"""
-def closestCent(centroids, point):
-    x,y = point
-    bestCent = 0
-    bestDist = float("inf")
-
-    for i in range(len(centroids)):
-        d = (((x-centroids[i][0])**2) + ((y-centroids[i][1])**2))**0.5
-        if d < bestDist:
-            bestDist = d
-            bestCent = i
-    return bestCent
 
 # Finding the closest centroid to the starting and end point for the robot
 startPoint = (0,0)
