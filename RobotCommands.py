@@ -40,9 +40,15 @@ def computeDistance(currCoord, nextCoord):
     return dist * 30.48
 
 def computeAngle(currCoord, nextCoord):
-    directlyAhead = (0, 2)
+    directlyAhead = (0, 1)
     toNextCoord = (nextCoord[0] - currCoord[0], nextCoord[1] - currCoord[1])
-    angleInRadians = math.acos((toNextCoord[0] + (2 * toNextCoord[1]))/(4*math.hypot(toNextCoord[0], toNextCoord[1])))
+    x = nextCoord[0] - currCoord[0]
+    y = nextCoord[1] - currCoord[1]
+    dotProduct = (x * directlyAhead[0]) + (y * directlyAhead[1])
+    magDirectlyAhead = math.hypot(directlyAhead[0], directlyAhead[1])
+    magNext = math.hypot(x, y)
+    cosAngle = dotProduct/(magDirectlyAhead*magNext)
+    angleInRadians = math.acos(cosAngle)
     angle = math.degrees(angleInRadians)
     return angle
 
