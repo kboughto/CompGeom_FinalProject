@@ -8,7 +8,7 @@ basically turning an image into a binary one by making pixels bayond a certain h
 The issue with this is most house objects are very similar colors to its surroundings.
 Code was used from https://learnopencv.com/convex-hull-using-opencv-in-python-and-c/"""
 
-img = cv2.imread("house_living_room.jpg")
+img = cv2.imread("sample_classrooms/empty_classroom.jpg")
 
 img_invert = cv2.bitwise_not(img)
 img_blur = cv2.blur(img_invert, (10, 10)) # blurs the image
@@ -43,10 +43,10 @@ for i in range(len(contours)):
 
 plt.figure(figsize=(12, 5))
 
-plt.subplot(1, 2, 1)
-plt.imshow(img_invert)
-plt.title("Inverted Image")
-plt.axis("off")
+# plt.subplot(1, 2, 1)
+# plt.imshow(img_invert)
+# plt.title("Inverted Image")
+# plt.axis("off")
 
 # plt.subplot(1, 2, 2)
 # plt.imshow(img_gray)
