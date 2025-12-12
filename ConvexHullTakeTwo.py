@@ -6,7 +6,7 @@ import cv2
 import matplotlib.pyplot as plt
 
 # Initializes variables
-img = cv2.imread("sample_classrooms/graph_classroom.png")
+img = cv2.imread("sample_classrooms/circle_classroom.png")
 
 # Given a contour in the form of a hierarchy array and the list of hierarchy arrays,
 # it determines the hierarchy of the contour
