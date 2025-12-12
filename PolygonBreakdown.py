@@ -142,7 +142,7 @@ patch = PathPatch(path)
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 axes.add_patch(patch)
-plt.savefig("path_progression/img_hole.png")
+plt.savefig("path_progression/classroom_setup.png")
 
 # makes polygon of classroom with hulls as holes
 points = shapely.Polygon([(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)], holes=hulls)
@@ -159,7 +159,7 @@ for coords in triPtsList: # iterates through triangles in triangulation
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
 
-plt.savefig("path_progression/img_triangulate.png")
+plt.savefig("path_progression/constrained_delaunay_triangulation.png")
 
 # This part adds the centroids to the triangulated classroom
 centroids = makeCentroids(triPoints)
@@ -169,7 +169,7 @@ ys = [c[1] for c in centroids]
 axes.scatter(xs,ys, color = 'pink', s=10)
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
-plt.savefig("path_progression/img_holes_cent.png")
+plt.savefig("path_progression/centroids_CDT.png")
 
 centroid_Graph = createCentroidGraph(triPoints, hulls)
 centroids = makeCentroids(triPoints)
@@ -182,7 +182,7 @@ for node in centroid_Graph:
 
 axes.set_xlim(0,newImage.shape[1])
 axes.set_ylim(0,newImage.shape[0])
-plt.savefig("path_progression/img_holes_graph.png")
+plt.savefig("path_progression/centroid_graph.png")
 
 # Finding the closest centroid to the starting and end point for the robot
 startPoint = (0,0)
@@ -200,5 +200,5 @@ shortPathY = [p[1] for p in shortPathCoords]
 
 axes.plot(shortPathX, shortPathY, color = 'red')
 axes.scatter(shortPathX, shortPathY, color ='red', s=10)
-plt.savefig("path_progression/shortestPathGraph.png")
+plt.savefig("path_progression/shortest_path_graph.png")
 plt.close("all")
