@@ -36,20 +36,21 @@ pip install numpy opencv-python shapely matplotlib networkx
 The first step in the pipeline is to extract the obstacles from the classroom image. Using OpenCV, the classroom image is processed with Canny edge detection in order to identify the object boundaries.
 Then, the convex hulls are computed based on these edges to give a good convex hull representation of the tables/chairs/desks in the classroom. These obstacles are then represented as polygonal holes inside the classroom boundary.
 
-Given the input classroom image:
+Given the input classroom image, created the convex hulls of the obstacles:
 
-![Classroom Image](sample_classrooms/circle_classroom.png)
-
-Convex Hulls Computed for Obstacles:
-
-![Classroom Environment Convex Hull](path_progression/circle_classroom_hulls.png)
+<p align="center">
+  <img src="sample_classrooms/circle_classroom.png" width="300" alt="Classroom Image">
+  <img src="path_progression/circle_classroom_hulls.png" width="300" alt="Classroom Environment Convex Hull">
+</p>
 
 ### Polygonal Environment
 
 The class is set up to be a rectangular polygon with the dimensions set to match the image inserted in the beginning. The obstacle convex hulls are then placed as holes within this polygon. Therefore it outputs a 
 polygonal region that has polygonal holes, which demonstrate the area available for path planning and a potential robot to navigate.
 
-![Classroom Environment Polygon Setup](path_progression/classroom_setup.png)
+<p align="center">
+  <img src="path_progression/classroom_setup.png" width="450" alt="Classroom Environment Polygon Setup">
+</p>
 
 ### Constrained Delaunay Triangulation
 
@@ -63,16 +64,20 @@ triangles are not contained within obstacle polygons.
 From the CDT, we compute each of the triangle's centroid and place it as a node in a graph using Networkx graph. Then, if two of the triangles are adjacent, then an edge is added between their centroids, as long as the edge being added does not cross any obstacle polygon boundaries.
 The edges are then weighted by distance between the centroids and the graphs represents the possible paths one may take between two points in the environment.
 
-![Centroids of CDT](path_progression/centroids_CDT.png)
+<p align="center">
+  <img src="path_progression/centroids_CDT.png" width="300" alt="Centroids of CDT">
+  <img src="path_progression/centroid_graph.png" width="300" alt="Centroid Graph">
+</p>
 
-![Centroid Graph](path_progression/centroid_graph.png)
 
 ### Finding the Shortest Path
 
 Lastly, the proposed start and end point are plotted to find the closest triangle centroids, as the path navigation is based on our centroid graph. Then, Dijsktra's algorithm is used on the centroid graph to find the shortest path between the two points.
 The result is a shortest path which successfully avoids crossing any obstacle polygons, and the path is made up of centroids from the CDT.
 
-![Shortest Path Between Points](path_progression/shortest_path_graph.png)
+<p align="center">
+  <img src="path_progression/shortest_path_graph.png" width="400" alt="Shortest Path Between Points">
+</p>
 
 ## Conclusion
 
