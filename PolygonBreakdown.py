@@ -1,9 +1,13 @@
 """
-Author: Keshawn Boughton & Nadezhda Dominguez Salinas
-This attempts to first plot a rectangle of the dimensions of a given image with 'holes'
-made from the convex hulls made in ConvexHullTakeTwo.py.
-Code for triangulation used from: https://shapely.readthedocs.io/en/2.1.2/reference/shapely.constrained_delaunay_triangles.html
-Code for visualization used from https://stackoverflow.com/questions/8919719/how-to-plot-a-complex-polygon
+Authors: Keshawn Boughton & Nadezhda Dominguez Salinas
+
+This file takes in an image of a classroom environment, detects the obstacle polygons within it, constructs the 
+constrained Delaunay triangulation of area excluding obstacles, constructs the centroid graph, and 
+finds the shortest path between two points (centroids) avoiding obstacles, using Dijkstra's.
+It utilizes the convex hulls made in the ConvexHullTakeTwo.py file, for the obstacle polygons.
+
+Code documentation used for triangulation used from: https://shapely.readthedocs.io/en/2.1.2/reference/shapely.constrained_delaunay_triangles.html
+Code documentation for parts of the visualization used from https://stackoverflow.com/questions/8919719/how-to-plot-a-complex-polygon
 """
 
 import matplotlib.pyplot as plt
@@ -18,9 +22,19 @@ img_contours, img_hier = imgConv.prepImage(newImage)
 hulls = imgConv.makeConvexHulls(img_contours, img_hier, newImage)
 # print(newImage.shape)
 
-"""Given a sequence of Geometric objects (Shapely exlcusive object)
-This reformats them into properly readable coordinate points. It returns a list of a list of tuples!"""
 def formatPolyPts(polyTri):
+    """
+    Converts a Shapely geomtry object of triangles into coordinate lists.
+
+    Parameters:
+    polyTri : shapely.geomtry.GeomtryCollection
+    A collection of triangular polygons producted by a constrained Delunay Triangulation.
+    
+    Returns:
+    list[list[tuple[float,float]]]
+    A list in which each element is a list of (x,y) coordinate typles which represent the exterior
+    vertices of a triangle. 
+    """
     polyPts = []
     for i in range(len(polyTri.geoms)):
         polyPts.append([])
@@ -29,11 +43,24 @@ def formatPolyPts(polyTri):
             polyPts[i].append((x[j], y[j]))
     return polyPts
 
-
-"""Given a list of tuples representing the exterior points and
-a list of list of tuples representing the interior points (these represent the holes),
-it formats the points in a way that's properly compatible with plotting."""
 def makePathFriendly(extPts, interPts):
+    """
+    Formats polygon boundary and hole coordinates for Matplotlib Path plotting.
+    This fuction converts the exterior and interior polygon coordinates into a vertex list and corresponding
+    Path action list compatible with the matplotlib.path.Path plotting.
+
+    Parameters:
+    extPts: list[tuple[float,float]]
+    This is an ordered list of (x,y) coordinates defining the exterior boundary of the polygon.
+    
+    interiorPts: list[list[tuple[float,float]]]
+    This is a list of polygons, where each polygon is represented by a list of (x,y) coordinates which represent
+    an interior hole.
+
+    Returns:
+    tuple[list[tuple[float,float]], list[int]]
+    This is a tuple which contains a list of vertices, and a list of Path action format to use for plotting.
+    """
     ptList = extPts.copy()
     actList = []
     for i in range(len(extPts)):
@@ -54,12 +81,23 @@ def makePathFriendly(extPts, interPts):
         ptList.append((0, 0))
     return ptList, actList
 
-"""
-Given the sequence of Triangules (again, Shapely exclusive object) and the hull points (in the form of a list of a list of tuples),
-This creates the graph such that its edges do not leave the triangulated polygon.
-Returns a graph made with Networkx.
-"""
 def createCentroidGraph(triangles, hullPts):
+    """
+    Builds a centroid navigation graph from the CDT. In which each triangle centroid is a node in a networkx graph.
+    Then, edges are constructed between the centroids of adjacent triangles if the connection between nodes 
+    does not interest any of the obstacle boundaries.
+
+    Parameters:
+    triangles: shapely.geomtry.GeomtryCollection
+    This is a collectino of triangles from the contrained Delaunay triangulation of the free space in class.
+
+    hullPts: list[list[tuple[float,float]]]
+    This is a list of obstacles hulls, in which each hull is represented a as a list of (x,y) coordinate tuples.
+
+    Returns:
+    A networkx.Graph which is an undirected weighed graph in which the nodes are triangle centroids of CDT and
+    the edge weights are the Euclidean distances in between the centroids.
+    """
     centGraph = nx.Graph()
     
     # Adding the centroids of the CDT as nodes in the graph
@@ -84,29 +122,58 @@ def createCentroidGraph(triangles, hullPts):
     
     return centGraph
 
-"""
-Given the sequence of Triangles, it computes its centroids and stores them as a list of tuples.
-"""
 def makeCentroids(triPts):
+    """
+    Computes the centroids for the collection of triangles from the CDT.
+
+    Parameters:
+    triPts: shapely.geomtry.GeomtryCollection
+    This is the collection of triangule polygons from the CDT found of an environment.
+
+    Returns:
+    list[tuple[float,float]]
+    This is a list of (x,y) coordinate tuples which are the centroids of each triangle from the CDT
+    """
     centroidsCDT = []
     for tri in triPts.geoms:
         cent = shapely.centroid(tri)
         centroidsCDT.append((cent.x, cent.y))
     return centroidsCDT
 
-"""
-Given a LineString and a list of list of coordinates as tuples,
-it checks whether the line intersects any of the hulls.
-"""
 def lineIntersectsPoly(line, polyCoords):
+    """
+    Checks whether a given line segment intersects the boundary of an obstacle polygon.
+
+    Parameters:
+    line: shapely.geomtry.LineString
+    This is the line segment that will be checked to see if intersection occured.
+
+    polyCoords: list[list[tuple[float,float]]]
+    This is the list of obstacle polygons, where each is represented as a list of (x,y) coordinate tuples.
+
+    Returns:
+    boolean, where True indicates the line intersected a obstacle boundary, otherwise it returns False.
+    """
     for hull in polyCoords:
         hulPoly = shapely.Polygon(hull)
         if hulPoly.boundary.intersects(line):
             return True
     return False
 
-"""Finding the closest centroid to the point in the classroom environment"""
 def closestCent(centroids, point):
+    """
+    Finds the index of the centroid which is closest to the specificed point.
+
+    Parameters:
+    centroid : list[tuple[float,float]]
+    The list of centroid coordinates.
+
+    point: tuple[float,float]
+    The (x,y) coordinate of the point being specified.
+
+    Returns:
+    int: which is the index of the centroid that is closest in distance to the point.
+    """
     x,y = point
     bestCent = 0
     bestDist = float("inf")
@@ -119,6 +186,23 @@ def closestCent(centroids, point):
     return bestCent
 
 def getShortestPathCoords(hullPts, img):
+    """
+    Computes the shortest path throughout the environment avoiding obstacle polygons.
+    This functions first constructs the constrained Delaunay triangulation of the classroom environmet. 
+    Then it builds the centroid graph, and uses Dijkstra's algorithm to compute the shortest path from the
+    start point (centroid) to the goal point (centroid).
+
+    Parameters:
+    hullPts: list[list[tuple[float,float]]]
+    The list of obstacle hull polygons represented as coordinate tuples.
+
+    img: numpy.ndarray
+    This is the image array that is used for the classroom environment dimensions 
+
+    Returns:
+    list[tuple[float,float]]
+    This is the ordered list of centroid coordinates from the shortest path of the two points.
+    """
     points = shapely.Polygon([(0, 0), (0, newImage.shape[0]), (newImage.shape[1], newImage.shape[0]), (newImage.shape[1], 0)], holes=hulls)
     triPoints = shapely.constrained_delaunay_triangles(points).normalize() # the triangulation!
     centGraph = createCentroidGraph(triPoints, hullPts)
