@@ -9,7 +9,7 @@ obstacles between a starting and end point (centroids) using Dijkstra's.
 
 ## How to Run Our Code
 
-Our main code file, PolygonBreakdown.py, containing our pipleine was written in Python, it contains descriptive docstrings for each of the functions created to help outline our process.
+Our main code file, CDTPath.py, containing our pipleine was written in Python, it contains descriptive docstrings for each of the functions created to help outline our process.
 
 Required to install the following: 
 
@@ -84,6 +84,14 @@ The result is a shortest path which successfully avoids crossing any obstacle po
 ## Conclusion
 
 
-### References
+## References
+
+1. Gene Eu Jan, Chien-Hung Lin, and Chih-Yung Hsu.  
+   **Obstacle avoidance path planning based on Delaunay triangulation for mobile robots.**  
+   *IEEE Access*, 9:137894–137905, 2021.
+
+2. Gillies, S., et al.  
+  **Shapely: Manipulation and Analysis of Geometric Objects, Constrained Delaunay Triangulation.**  
+  Python package, version 2.1.0. https://shapely.readthedocs.io/
 
 
