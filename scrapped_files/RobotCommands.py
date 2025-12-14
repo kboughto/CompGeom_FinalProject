@@ -1,5 +1,5 @@
-import ConvexHullTakeTwo as Conv
-import PolygonBreakdown as Poly
+import ConvexHullObstacles as Conv
+import CDTPath as Poly
 # from ev3dev2.motor import LargeMotor, OUTPUT_B, OUTPUT_C, MoveTank, SpeedPercent
 # from ev3dev2.sensor.lego import GyroSensor
 # from ev3dev2.sensor import IN1

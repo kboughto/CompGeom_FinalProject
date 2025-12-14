@@ -4,7 +4,7 @@ Authors: Keshawn Boughton & Nadezhda Dominguez Salinas
 This file takes in an image of a classroom environment, detects the obstacle polygons within it, constructs the 
 constrained Delaunay triangulation of area excluding obstacles, constructs the centroid graph, and 
 finds the shortest path between two points (centroids) avoiding obstacles, using Dijkstra's.
-It utilizes the convex hulls made in the ConvexHullTakeTwo.py file, for the obstacle polygons.
+It utilizes the convex hulls made in the ConvexHullObstacles.py file, for the obstacle polygons.
 
 Code documentation used for triangulation used from: https://shapely.readthedocs.io/en/2.1.2/reference/shapely.constrained_delaunay_triangles.html
 Code documentation for parts of the visualization used from https://stackoverflow.com/questions/8919719/how-to-plot-a-complex-polygon
@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import PathPatch
 from matplotlib.path import Path
 import shapely
-import ConvexHullTakeTwo as imgConv
+import ConvexHullObstacles as imgConv
 import networkx as nx
 
 newImage = imgConv.getImage()
