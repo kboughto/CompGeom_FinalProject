@@ -101,16 +101,16 @@ def makeConvexHulls(contours, hierarchy, img, reformat=True):
     
     return hullPoints
 
-# img_contours, img_hier = prepImage(img)
-# hulls = makeConvexHulls(img_contours, img_hier, img, reformat=False)
-# drawContoursOntoImage(img, hulls)
+img_contours, img_hier = prepImage(img)
+hulls = makeConvexHulls(img_contours, img_hier, img, reformat=False)
+drawContoursOntoImage(img, hulls)
 
-# plt.figure(figsize=(12, 5))
+plt.figure(figsize=(12, 5))
 
-# plt.subplot(1, 2, 1)
-# plt.imshow(img)
-# plt.title("Original Image")
-# plt.axis("off")
+plt.subplot(1, 2, 1)
+plt.imshow(img)
+plt.title("Original Image")
+plt.axis("off")
 
 # plt.subplot(1, 2, 2)
 # plt.imshow(img_blur_edges)
@@ -122,5 +122,5 @@ def makeConvexHulls(contours, hierarchy, img, reformat=True):
 # plt.title("Hulled Image")
 # plt.axis("off")
 
-# plt.tight_layout()
-# plt.show()
+plt.tight_layout()
+plt.show()
