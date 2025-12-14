@@ -16,7 +16,7 @@ Required to install the following:
 - numpy
 - opencv-python
 - shapely (version 2.0 or higher)
-- matplotlin
+- matplotlib
 - networkx
 
 You may install all using:
@@ -57,7 +57,9 @@ polygonal region that has polygonal holes, which demonstrate the area available 
 Using Shapely, we compute the constrained Delaunay triangulation (CDT) of the space inside the classroom environment excluding the obstacles. The triangulation is able to avoid triangulating within the obstacle boundaries, and therefore
 triangles are not contained within obstacle polygons. 
 
-![Constrained Delaunay Triangulation](path_progression/constrained_delaunay_triangulation.png)
+<p align="center">
+  <img src="path_progression/constrained_delaunay_triangulation.png" width="450" alt="Constrained Delaunay Triangulation">
+</p>
 
 ### Computing Centroid & Centroid Graph
 
