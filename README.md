@@ -9,7 +9,7 @@ obstacles between a starting and end point (centroids) using Dijkstra's.
 
 ## How to Run Our Code
 
-Our main code file, CDTPath.py, containing our pipleine was written in Python, it contains descriptive docstrings for each of the functions created to help outline our process.
+Our main code file, CDTPath.py, containing our pipeline to find the shortest path was written in Python using Shapely and Networkx libraries, the file contains descriptive docstrings for each of the functions created to help outline our process. The code which takes in the classroom environment image and creates the convex hulls is in ConvexHullObstacles.py.
 
 Required to install the following: 
 
@@ -25,9 +25,9 @@ pip install numpy opencv-python shapely matplotlib networkx
 
 ## Running Our Program
 
-1. Place an image of a classroom into the sample/classrooms file if you would like to use a new example. Then in the ConvexHullTakeTwo.py file change the input for img =  cv2.imread("sample_classrooms/circle_classroom.png"). The default setting is the circle_classroom.
-2. Run the program of PolygonBreakdown.py by pressing the top right run button on the file, or if using terminal type python PolygonBreakdown.py
-3. The resulting visualizations of each step in our pipeline will be store to the path_progression folder.
+1. Place an image of a classroom into the sample_classrooms folder if you would like to use a new environment example. Then in the ConvexHullObstacles.py file change the input for, img =  cv2.imread("sample_classrooms/circle_classroom.png"), to the new classroom environment png name. The default setting is the circle_classroom example.
+2. Run the program in PolygonBreakdown.py by pressing the top right run button on the file, or if using the terminal type python PolygonBreakdown.py into the terminal and press enter.
+3. The resulting visualizations of each step in our pipeline will be stored in the path_progression folder.
 
 ## Explanation of How the Code Works
 
