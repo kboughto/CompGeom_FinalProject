@@ -43,7 +43,6 @@ Given the input classroom image:
 Convex Hulls Computed for Obstacles:
 
 ![Classroom Environment Convex Hull](path_progression/circle_classroom_hulls.png)
-)
 
 ### Polygonal Environment
 
