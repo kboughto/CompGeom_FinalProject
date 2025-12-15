@@ -3,9 +3,9 @@
 ## Computational Geometry Fall 2025
 
 ## Overview
-This file contains implementation example of the path planning using constrained Delauay Triangulation. Given an image of a classroom environment, we find the obstacles within it and set them as
+This file contains an implementation example of path planning using constrained Delauay triangulation (CDT). Given an image of a classroom environment, we find the obstacles within it and set them as
 obstacle polygons, construct the envrionemnt and obstacles as polygons, find the centroids of the CDT and build a graph connecting adjacent centroids, then compute the shortest path avoiding
-obstacles between a starting and end point (centroids) using Dijkstra's. 
+obstacles between a starting and end point (centroids) using Dijkstra's algorithm.
 
 ## How to Run Our Code
 
@@ -19,15 +19,15 @@ Required to install the following:
 - matplotlib
 - networkx
 
-You may install all using:
+You may install all by running the following command in your terminal:
 
 pip install numpy opencv-python shapely matplotlib networkx
 
 ## Running Our Program
 
-1. Place an image of a classroom into the sample_classrooms folder if you would like to use a new environment example. Then in the ConvexHullObstacles.py file change the input for, img =  cv2.imread("sample_classrooms/circle_classroom.png"), to the new classroom environment png name. The default setting is the circle_classroom example.
+1. If you would like to use a new classroom environment example besides the default, place an image of a classroom into the sample_classrooms folder. Then in the ConvexHullObstacles.py file change the input for, img =  cv2.imread("sample_classrooms/circle_classroom.png"), to the new classroom environment png name. The default setting is the circle_classroom example. Click the run button on the ConvexHullObstacles.py file to calculate the convex hulls for the environment, then continue to the next step.
 2. Run the program in CDTPath.py by pressing the top right run button on the file, or if using the terminal type python CDTPath.py into the terminal and press enter.
-3. The resulting visualizations of each step in our pipeline will be stored in the path_progression folder.
+3. The resulting visualizations of each step in our pipeline will be stored in the path_progression folder, open the folder to view the results and shortest path computed.
 
 ## Explanation of How the Code Works
 
