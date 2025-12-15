@@ -26,7 +26,7 @@ pip install numpy opencv-python shapely matplotlib networkx
 ## Running Our Program
 
 1. Place an image of a classroom into the sample_classrooms folder if you would like to use a new environment example. Then in the ConvexHullObstacles.py file change the input for, img =  cv2.imread("sample_classrooms/circle_classroom.png"), to the new classroom environment png name. The default setting is the circle_classroom example.
-2. Run the program in PolygonBreakdown.py by pressing the top right run button on the file, or if using the terminal type python PolygonBreakdown.py into the terminal and press enter.
+2. Run the program in CDTPath.py by pressing the top right run button on the file, or if using the terminal type python CDTPath.py into the terminal and press enter.
 3. The resulting visualizations of each step in our pipeline will be stored in the path_progression folder.
 
 ## Explanation of How the Code Works
@@ -83,6 +83,7 @@ The result is a shortest path which successfully avoids crossing any obstacle po
 
 ## Conclusion
 
+The project implemented a CDT based path planning strategy that effectively produced a shortest path for a robot when given a classroom environment with obstacles. This planning strategy was solely programmed in Python, using its various libraries. Our environment involved the traversable space in a classroom, which excluded the set $H$ of obstacles in the classroom. This environment was constructed using Python's OpenCV. Then the environment was triangulated and used to make a viable path using Python's Shapely. Through identifying obstacles in the environment, computing the constrained triangulation, building a centroid graph, and applying Dijkstra's algorithm, we obtained an optimum path for a robot to navigate a classroom.
 
 ## References
 
