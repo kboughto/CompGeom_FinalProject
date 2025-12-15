@@ -3,7 +3,7 @@
 ## Computational Geometry Fall 2025
 
 ## Overview
-This file contains an implementation example of path planning using constrained Delauay triangulation (CDT). Given an image of a classroom environment, we find the obstacles within it and set them as
+This file contains an implementation example of path planning using constrained Delaunay triangulation (CDT). Given an image of a classroom environment, we find the obstacles within it and set them as
 obstacle polygons, construct the envrionemnt and obstacles as polygons, find the centroids of the CDT and build a graph connecting adjacent centroids, then compute the shortest path avoiding
 obstacles between a starting and end point (centroids) using Dijkstra's algorithm.
 
